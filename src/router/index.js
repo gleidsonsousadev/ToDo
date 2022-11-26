@@ -26,8 +26,8 @@ const routes = [
 
 const router = new VueRouter({
 	mode: 'history',
-	// base: process.env.BASE_URL,
-  base: '/gleidson/todo/',
+	base: process.env.BASE_URL,
+  // base: '/gleidson/todo/',
 	routes,
 });
 
