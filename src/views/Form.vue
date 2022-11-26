@@ -82,11 +82,9 @@ export default {
 				<b-icon icon="pin-angle-fill" />
 				Salvar
 			</b-button>
-			<a href="/list">
-				<b-button type="button" variant="success">
+				<b-button to="/list" type="button" variant="success">
 					Ir para Tarefas
 				</b-button>
-			</a>
 		</b-form>
 	</div>
 </template>

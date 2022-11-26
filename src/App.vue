@@ -2,7 +2,7 @@
 	<div id="app">
 		<div>
 			<b-navbar toggleable="lg" type="dark" variant="primary">
-				<b-navbar-brand href="/">ToDo List</b-navbar-brand>
+				<b-navbar-brand to="/">ToDo List</b-navbar-brand>
 
 				<b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
@@ -18,4 +18,3 @@
 	</div>
 </template>
 
-<style></style>

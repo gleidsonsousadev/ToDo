@@ -88,9 +88,9 @@ export default {
 					<b-icon icon="trash-fill"></b-icon>
 				</b-button>
 			</b-card>
-			<a href="./form">
-				<b-button class="m-2" variant="outline-primary">Voltar</b-button>
-			</a>
+			<b-button to="/form" class="m-2" variant="outline-primary">
+				Voltar
+			</b-button>
 		</div>
 
 		<b-modal ref="modalRemove" hide-footer title="Exclusão de Tarefa">
@@ -114,7 +114,6 @@ export default {
 </template>
 
 <style scoped>
-
 input[type='checkbox'] {
 	transform: scale(1.5);
 }
