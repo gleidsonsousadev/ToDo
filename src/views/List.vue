@@ -6,6 +6,7 @@ export default {
 			search: '',
 			tasks: [],
 			taskSelected: [],
+			taskHighlight: null
 		};
 	},
 	computed: {
@@ -20,6 +21,9 @@ export default {
 	},
 
 	created() {
+
+		this.taskHighlight = this.$route.params.index;
+
 		this.tasks = localStorage.getItem('tasks')
 			? JSON.parse(localStorage.getItem('tasks'))
 			: [];
@@ -65,7 +69,7 @@ export default {
 		</div>
 
 		<div>
-			<b-card class="m-4" v-for="(task, index) in tasksList" :key="index">
+			<b-card :class="{ highlight: taskHighlight == index }" class="m-4" v-for="(task, index) in tasksList" :key="index">
 				<input type="checkbox" class="cbox4" value="fourth_checkbox" />
 				<label for="cbox4">
 					<b-card-text class="h3 mb-3" id="title">
@@ -119,12 +123,15 @@ input[type='checkbox'] {
 }
 
 input[type='checkbox']:checked + label {
-	color: red;
+	color: rgb(145, 145, 145);
 	text-decoration: line-through;
+	font-style: italic;
 }
 .cbox4 {
-	color: red;
 	margin-right: 10px;
-	text-decoration: line-through;
+}
+.highlight {
+	border: 1.5px solid rgb(158, 177, 169);
+	background-color: rgb(245, 255, 251);
 }
 </style>

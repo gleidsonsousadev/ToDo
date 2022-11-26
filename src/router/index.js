@@ -1,34 +1,40 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import List from '../views/List.vue'
-import Form from '../views/Form.vue'
-import Home from '../views/Home.vue'
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import List from '../views/List.vue';
+import Form from '../views/Form.vue';
+import Home from '../views/Home.vue';
+import Login from '../views/Login.vue';
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes = [
-  
-  {
-    path: '/',
-    name: 'home',
-    component: Home
-  },
-  {
-    path: '/list',
-    name: 'list',
-    component: List
-  },
-  {
-    path: '/form',
-    name: 'form',
-    component: Form
-  },
-]
+	{
+		path: '/',
+		name: 'home',
+		component: Home,
+	},
+	{
+		path: '/list',
+		name: 'list',
+		component: List,
+	},
+	{
+		path: '/form',
+		name: 'form',
+		component: Form,
+	},
+	,
+	{
+		path: '/login',
+		name: 'login',
+		component: Login,
+	},
+];
 
 const router = new VueRouter({
-  mode: 'history',
-  base: process.env.BASE_URL,
-  routes
-})
+	mode: 'history',
+	base: process.env.BASE_URL,
+	routes,
+});
 
-export default router
+export default router;

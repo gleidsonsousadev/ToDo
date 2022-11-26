@@ -1,10 +1,7 @@
 <script>
 export default {
-	name: 'Home',
-	data() {
-		return {};
-	},
-};
+	name: 'Home'
+}
 </script>
 
 <template>

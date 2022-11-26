@@ -12,39 +12,33 @@ export default {
 				subject: '',
 				description: '',
 			},
-			methodSave: 'new',
+			tasks: [],
 		};
 	},
 
 	created() {
-		if (
-			this.$route.params.index === 0 ||
-			this.$route.params.index !== undefined
-		) {
-			this.methodSave = 'update';
-			let tasks = JSON.parse(localStorage.getItem('tasks'));
-			this.form = tasks[this.$route.params.index];
+		const index = this.$route.params.index;
+		this.tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+
+		if (index !== undefined) {
+			this.form = this.tasks[index];
 		}
 	},
 
 	methods: {
 		saveTask() {
-			if (this.methodSave === 'update') {
-				let tasks = JSON.parse(localStorage.getItem('tasks'));
-				tasks[this.$route.params.index] = this.form;
-				localStorage.setItem('tasks', JSON.stringify(tasks));
-				this.showToast('success', 'Sucesso!', 'Tarefa atualizada com sucesso!');
-				this.$router.push({ name: 'list' });
-				return;
-			}
+			let index = this.$route.params.index;
+			let tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
 
-			let tasks = localStorage.getItem('tasks')
-				? JSON.parse(localStorage.getItem('tasks'))
-				: [];
-			tasks.push(this.form);
+			if (index !== undefined) {
+				tasks[index] = this.form;
+			} else {
+				tasks.push(this.form);
+				index = tasks.length - 1;
+			}
 			localStorage.setItem('tasks', JSON.stringify(tasks));
-			this.showToast('success', 'Sucesso!', 'Tarefa criada com sucesso!');
-			this.$router.push({ name: 'list' });
+			this.showToast('success', 'Parabéns!', 'Operação realizada com sucesso!');
+			this.$router.push({ name: 'list', params: { index } });
 		},
 	},
 };
@@ -78,13 +72,18 @@ export default {
 				>
 				</b-form-textarea>
 			</b-form-group>
-			<b-button type="submit" variant="outline-primary" @click="saveTask" class="mr-3">
+			<b-button
+				type="submit"
+				variant="outline-primary"
+				@click="saveTask"
+				class="mr-3"
+			>
 				<b-icon icon="pin-angle-fill" />
 				Salvar
 			</b-button>
-				<b-button to="/list" type="button" variant="success">
-					Ir para Tarefas
-				</b-button>
+			<b-button to="/list" type="button" variant="success">
+				Ir para Tarefas
+			</b-button>
 		</b-form>
 	</div>
 </template>
