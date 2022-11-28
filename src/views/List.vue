@@ -6,14 +6,17 @@ export default {
 			search: '',
 			tasks: [],
 			taskSelected: [],
-			taskHighlight: null
+			taskHighlight: null,
 		};
 	},
 	computed: {
 		tasksList() {
 			if (this.search.trim().length > 0) {
-				return this.tasks.filter((task) =>
-					task.subject.toLowerCase().includes(this.search.trim())
+				const search = this.search.trim().toLowerCase();
+				return this.tasks.filter(
+					(task) =>
+						task.subject.toLowerCase().includes(search) ||
+						task.description.toLowerCase().includes(search)
 				);
 			}
 			return this.tasks;
@@ -21,7 +24,6 @@ export default {
 	},
 
 	created() {
-
 		this.taskHighlight = this.$route.params.index;
 
 		this.tasks = localStorage.getItem('tasks')
@@ -69,7 +71,12 @@ export default {
 		</div>
 
 		<div>
-			<b-card :class="{ highlight: taskHighlight == index }" class="m-4" v-for="(task, index) in tasksList" :key="index">
+			<b-card
+				:class="{ highlight: taskHighlight == index }"
+				class="m-4"
+				v-for="(task, index) in tasksList"
+				:key="index"
+			>
 				<input type="checkbox" class="cbox4" value="fourth_checkbox" />
 				<label for="cbox4">
 					<b-card-text class="h3 mb-3" id="title">
