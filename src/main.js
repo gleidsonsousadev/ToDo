@@ -1,18 +1,25 @@
-import Vue from 'vue'
-import App from './App.vue'
-import router from './router'
+import Vue from 'vue';
+import Vuelidate from 'vuelidate';
+import axios from "axios";
+import { Model } from "vue-api-query";
 
-import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue'
+import App from './App.vue';
+import router from './router';
 
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
+import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue';
 
-Vue.use(BootstrapVue)
-Vue.use(BootstrapVueIcons)
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap-vue/dist/bootstrap-vue.css';
 
-Vue.config.productionTip = false
+Vue.use(BootstrapVue);
+Vue.use(BootstrapVueIcons);
+Vue.use(Vuelidate);
+
+Model.$http = axios;
+
+Vue.config.productionTip = false;
 
 new Vue({
-  router,
-  render: h => h(App)
-}).$mount('#app')
+	router,
+	render: (h) => h(App),
+}).$mount('#app');

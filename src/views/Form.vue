@@ -1,4 +1,6 @@
 <script>
+import { required, minLength } from 'vuelidate/lib/validators';
+
 import ToastMixin from '@/mixins/toastMixin.js';
 
 export default {
@@ -25,6 +27,15 @@ export default {
 		}
 	},
 
+	validations: {
+		form: {
+			subject: {
+				required,
+				minLength: minLength(3),
+			},
+		},
+	},
+
 	methods: {
 		saveTask() {
 			let index = this.$route.params.index;
@@ -33,12 +44,27 @@ export default {
 			if (index !== undefined) {
 				tasks[index] = this.form;
 			} else {
-				tasks.push(this.form);
+				if ( this.form.subject.length < 1 ) {
+					this.showToast( 'danger', 'Erro!', 'Digite uma Tarefa!' );	
+					return
+				} 
+				const userId = JSON.parse( localStorage.getItem( "authUser" ) ).id
+				tasks.push({...this.form, userId});
 				index = tasks.length - 1;
 			}
 			localStorage.setItem('tasks', JSON.stringify(tasks));
 			this.showToast('success', 'Parabéns!', 'Operação realizada com sucesso!');
 			this.$router.push({ name: 'list', params: { index } });
+		},
+	},
+
+	computed: {
+		getValidation() {
+			if (this.$v.form.subject.$dirty === false) {
+				return null;
+			}
+
+			return !this.$v.form.subject.$error;
 		},
 	},
 };
@@ -51,12 +77,13 @@ export default {
 			<b-form-group label="Tarefa" label-for="subject">
 				<b-form-input
 					id="subject"
-					v-model="form.subject"
+					v-model.trim="$v.form.subject.$model"
 					type="text"
 					placeholder="Digite a Tarefa"
 					required
 					autocomplete="off"
-					value=""
+					:state="getValidation"
+					aria-describedby="subject-feedback"
 				>
 				</b-form-input>
 			</b-form-group>
@@ -65,15 +92,14 @@ export default {
 					id="description"
 					v-model="form.description"
 					type="text"
-					placeholder="Descrição da tarefa aqui!"
+					placeholder="Digite a descrição"
 					required
 					autocomplete="off"
-					value=""
 				>
 				</b-form-textarea>
 			</b-form-group>
 			<b-button
-				type="submit"
+				type="button"
 				variant="outline-primary"
 				@click="saveTask"
 				class="mr-3"

@@ -1,0 +1,12 @@
+{
+  "tasks": [],
+  "users": [
+    {
+      "name": "Gleidson",
+      "email": "gleidson@teste.com.br",
+      "password": "123456",
+      "confirmPassword": "123456",
+      "id": 1
+    }
+  ]
+}

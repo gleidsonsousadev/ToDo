@@ -26,8 +26,12 @@ export default {
 	created() {
 		this.taskHighlight = this.$route.params.index;
 
+		const userId = JSON.parse(localStorage.getItem("authUser")).id
+
 		this.tasks = localStorage.getItem('tasks')
-			? JSON.parse(localStorage.getItem('tasks'))
+			? JSON.parse( localStorage.getItem( 'tasks' ) ).filter( ( item ) => {
+				return item.userId === userId
+			})
 			: [];
 	},
 	methods: {
