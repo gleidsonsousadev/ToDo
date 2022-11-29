@@ -24,24 +24,41 @@ export default {
 	},
 
 	created() {
-		this.taskHighlight = this.$route.params.index;
+		this.taskHighlight = this.$route.params.id;
 
 		const userId = JSON.parse(localStorage.getItem("authUser")).id
 
 		this.tasks = localStorage.getItem('tasks')
-			? JSON.parse( localStorage.getItem( 'tasks' ) ).filter( ( item ) => {
+			? this.getLocalTasks().filter( ( item ) => {
 				return item.userId === userId
 			})
 			: [];
 	},
 	methods: {
-		edit(index) {
-			this.$router.push({ name: 'form', params: { index } });
+
+		setLocalTasks(tasks) {
+			localStorage.setItem('tasks', JSON.stringify(tasks))
 		},
 
-		remove(task, index) {
-			this.taskSelected = task;
-			this.taskSelected.index = index;
+		getLocalTasks() {
+			return JSON.parse( localStorage.getItem( 'tasks' ) )
+		},
+
+		done( id ) {
+			const index = this.tasks.findIndex( i => i.id === id );
+			this.tasks[ index ].done = !this.tasks[ index ].done;
+			const localTasks = this.getLocalTasks()
+			const localIndex = localTasks.findIndex( i => i.id === id )
+			localTasks[localIndex].done = !localTasks[localIndex].done 
+			this.setLocalTasks(localTasks)
+		},
+
+		edit(id) {
+			this.$router.push({ name: 'form', params: { id } });
+		},
+
+		remove(id) {
+			this.taskSelected = id;
 			this.$refs.modalRemove.show();
 		},
 
@@ -50,8 +67,10 @@ export default {
 		},
 
 		confirmRemoveTask() {
-			this.tasks.splice(this.taskSelected.index, 1);
-			localStorage.setItem('tasks', JSON.stringify(this.tasks));
+			this.tasks = this.tasks.filter( task => task.id !== this.taskSelected )
+			const localTasks = this.getLocalTasks() 
+			const tasks = localTasks.filter( task => task.id !== this.taskSelected )
+			this.setLocalTasks(tasks)
 			this.hideModal();
 		},
 	},
@@ -76,12 +95,12 @@ export default {
 
 		<div>
 			<b-card
-				:class="{ highlight: taskHighlight == index }"
+				:class="{ highlight: taskHighlight == task.id }"
 				class="m-4"
-				v-for="(task, index) in tasksList"
-				:key="index"
+				v-for="(task) in tasksList"
+				:key="task.id"
 			>
-				<input type="checkbox" class="cbox4" value="fourth_checkbox" />
+				<input type="checkbox" class="cbox4" :checked="task.done" :model="task.done" @click="done(task.id)" />
 				<label for="cbox4">
 					<b-card-text class="h3 mb-3" id="title">
 						{{ task.subject }}
@@ -91,14 +110,14 @@ export default {
 					{{ task.description }}
 				</b-card-text>
 
-				<b-button variant="outline-secondary" class="mr-2" @click="edit(index)">
+				<b-button variant="outline-secondary" class="mr-2" @click="edit(task.id)">
 					<b-icon icon="pencil-fill"></b-icon>
 				</b-button>
 
 				<b-button
 					variant="outline-danger"
 					class="mr-2"
-					@click="remove(task, index)"
+					@click="remove(task.id)"
 				>
 					<b-icon icon="trash-fill"></b-icon>
 				</b-button>

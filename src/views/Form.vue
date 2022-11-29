@@ -3,30 +3,34 @@ import { required, minLength } from 'vuelidate/lib/validators';
 
 import ToastMixin from '@/mixins/toastMixin.js';
 
+import { v4 as uuidv4 } from 'uuid';
+
 export default {
 	name: 'Form',
-
+	
 	mixins: [ToastMixin],
-
+	
 	data() {
 		return {
 			form: {
+				id: '',
 				subject: '',
 				description: '',
+				done: false
 			},
 			tasks: [],
 		};
 	},
-
+	
 	created() {
-		const index = this.$route.params.index;
+		const id = this.$route.params.id;
 		this.tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
-
-		if (index !== undefined) {
-			this.form = this.tasks[index];
+		
+		if (id !== undefined) {
+			this.form = this.tasks.filter(task => task.id == id)[0];
 		}
 	},
-
+	
 	validations: {
 		form: {
 			subject: {
@@ -35,13 +39,14 @@ export default {
 			},
 		},
 	},
-
+	
 	methods: {
 		saveTask() {
-			let index = this.$route.params.index;
+			let id = this.$route.params.id;
 			let tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
-
-			if (index !== undefined) {
+			
+			if ( id !== undefined ) {
+				const index = tasks.findIndex( item => item.id === id )
 				tasks[index] = this.form;
 			} else {
 				if ( this.form.subject.length < 1 ) {
@@ -49,12 +54,12 @@ export default {
 					return
 				} 
 				const userId = JSON.parse( localStorage.getItem( "authUser" ) ).id
-				tasks.push({...this.form, userId});
-				index = tasks.length - 1;
+				id = uuidv4();
+				tasks.push({...this.form, userId, id});
 			}
 			localStorage.setItem('tasks', JSON.stringify(tasks));
 			this.showToast('success', 'Parabéns!', 'Operação realizada com sucesso!');
-			this.$router.push({ name: 'list', params: { index } });
+			this.$router.push({ name: 'list', params: { id } });
 		},
 	},
 
