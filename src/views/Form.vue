@@ -14,7 +14,7 @@ export default {
 		return {
 			form: {
 				id: '',
-				subject: '',
+				title: '',
 				description: '',
 				done: false
 			},
@@ -33,7 +33,7 @@ export default {
 	
 	validations: {
 		form: {
-			subject: {
+			title: {
 				required,
 				minLength: minLength(3),
 			},
@@ -49,7 +49,7 @@ export default {
 				const index = tasks.findIndex( item => item.id === id )
 				tasks[index] = this.form;
 			} else {
-				if ( this.form.subject.length < 1 ) {
+				if ( this.form.title.length < 1 ) {
 					this.showToast( 'danger', 'Erro!', 'Digite uma Tarefa!' );	
 					return
 				} 
@@ -65,11 +65,11 @@ export default {
 
 	computed: {
 		getValidation() {
-			if (this.$v.form.subject.$dirty === false) {
+			if (this.$v.form.title.$dirty === false) {
 				return null;
 			}
 
-			return !this.$v.form.subject.$error;
+			return !this.$v.form.title.$error;
 		},
 	},
 };
@@ -79,16 +79,16 @@ export default {
 	<div class="container mt2">
 		<b-form class="m-3">
 			<h3>Crie sua Lista de Tarefas!</h3>
-			<b-form-group label="Tarefa" label-for="subject">
+			<b-form-group label="Tarefa" label-for="title">
 				<b-form-input
-					id="subject"
-					v-model.trim="$v.form.subject.$model"
+					id="title"
+					v-model.trim="$v.form.title.$model"
 					type="text"
 					placeholder="Digite a Tarefa"
 					required
 					autocomplete="off"
 					:state="getValidation"
-					aria-describedby="subject-feedback"
+					aria-describedby="title-feedback"
 				>
 				</b-form-input>
 			</b-form-group>

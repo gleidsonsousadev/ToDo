@@ -15,7 +15,7 @@ export default {
 				const search = this.search.trim().toLowerCase();
 				return this.tasks.filter(
 					(task) =>
-						task.subject.toLowerCase().includes(search) ||
+						task.title.toLowerCase().includes(search) ||
 						task.description.toLowerCase().includes(search)
 				);
 			}
@@ -104,7 +104,7 @@ export default {
 				<input type="checkbox" class="cbox4" :checked="task.done" :model="task.done" @click="done(task.id)" />
 				<label for="cbox4">
 					<b-card-text class="h3 mb-3" id="title">
-						{{ task.subject }}
+						{{ task.title }}
 					</b-card-text>
 				</label>
 				<b-card-text class="h5 mb-3" id="title">
@@ -130,7 +130,7 @@ export default {
 
 		<b-modal ref="modalRemove" hide-footer title="Exclusão de Tarefa">
 			<div class="d-block text-center">
-				Deseja realmente excluir a tarefa {{ taskSelected.subject }} ?
+				Deseja realmente excluir a tarefa {{ taskSelected.title }} ?
 			</div>
 			<div class="mt-3 d-flex justify-content-end">
 				<b-button variant="outline-secondary" class="mr-2" @click="hideModal">
